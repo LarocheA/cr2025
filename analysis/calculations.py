@@ -17,3 +17,15 @@ def calculate_correlation_matrix(portfolio):
         hist_data = pd.DataFrame(portfolio.crypto_data.historical_data[symbol])
         df_close[symbol] = hist_data['close']
     return df_close.corr()
+
+def interpret_fear_greed_index(index):
+    if index <= 20:
+        return "Extreme Fear"
+    elif index <= 40:
+        return "Fear"
+    elif index <= 60:
+        return "Neutral"
+    elif index <= 80:
+        return "Greed"
+    else:
+        return "Extreme Greed"
