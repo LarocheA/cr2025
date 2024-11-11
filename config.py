@@ -2,6 +2,7 @@
 
 API_KEY = "02f11b8b9dec16c0149bae39ee0b3f4ea8cf7528552e71622d8b887ff3f149a0"
 BASE_URL = "https://min-api.cryptocompare.com/data/v2"
+FEAR_GREED_URL = "https://api.alternative.me/fng/"
 PORTFOLIO = [
     {"symbol": "BTC", "quantity": 0.01177501},
     {"symbol": "ETH", "quantity": 0.22375339},
