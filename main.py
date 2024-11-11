@@ -1,24 +1,57 @@
+# main.py
+
+import pandas as pd
 from config import PORTFOLIO
 from data.crypto_data import CryptoData
 from portfolio.portfolio import Portfolio
 from analysis.calculations import calculate_portfolio_return, calculate_sharpe_ratio, calculate_correlation_matrix
+from analysis.optimization import optimize_portfolio
+from analysis.visualization import plot_portfolio_allocation, plot_price_history, plot_correlation_heatmap
+from ui.cli import run_cli
+from ui.gui import run_gui
+from utils.helpers import load_csv, save_csv, get_current_timestamp
 
 def main():
+    # Initialisation des données
     crypto_data = CryptoData(PORTFOLIO)
     crypto_data.update_prices()
     crypto_data.get_historical_data()
     crypto_data.update_fear_greed_index()
 
+    # Création du portefeuille
     portfolio = Portfolio(crypto_data)
 
-    print(f"Total Portfolio Value: ${portfolio.get_total_value():.2f}")
-    print(f"Portfolio Return: {calculate_portfolio_return(portfolio):.2f}%")
-    print(f"Sharpe Ratio: {calculate_sharpe_ratio(portfolio):.2f}")
+    # Calculs et analyses
+    portfolio_return = calculate_portfolio_return(portfolio)
+    sharpe_ratio = calculate_sharpe_ratio(portfolio)
+    correlation_matrix = calculate_correlation_matrix(portfolio)
+
+    # Optimisation du portefeuille
+    optimal_weights = optimize_portfolio(portfolio)
+
+    # Affichage des résultats
+    print(f"Valeur totale du portefeuille: ${portfolio.get_total_value():.2f}")
+    print(f"Rendement du portefeuille: {portfolio_return:.2f}%")
+    print(f"Ratio de Sharpe: {sharpe_ratio:.2f}")
     print(f"Fear and Greed Index: {crypto_data.fear_greed_index}")
 
-    correlation_matrix = calculate_correlation_matrix(portfolio)
-    print("Correlation Matrix:")
-    print(correlation_matrix)
+    # Visualisations
+    plot_portfolio_allocation(portfolio)
+    plot_price_history(portfolio)
+    plot_correlation_heatmap(correlation_matrix)
+
+    # Sauvegarde des données
+    df_portfolio = portfolio.to_dataframe()
+    save_csv(df_portfolio, f'portfolio_data_{get_current_timestamp()}.csv')
+
+    # Lancement de l'interface utilisateur
+    choice = input("Choisissez l'interface (cli/gui): ").lower()
+    if choice == 'cli':
+        run_cli(portfolio)
+    elif choice == 'gui':
+        run_gui(portfolio)
+    else:
+        print("Choix invalide. Fin du programme.")
 
 if __name__ == "__main__":
     main()
