@@ -36,3 +36,27 @@ def plot_optimized_weights(weights, symbols):
     plt.xticks(rotation=45)
     plt.tight_layout()
     plt.show()
+
+def plot_portfolio_allocation(portfolio):
+    df = portfolio.to_dataframe()
+    plt.figure(figsize=(10, 6))
+    plt.pie(df['total_value'], labels=df['symbol'], autopct='%1.1f%%')
+    plt.title('Allocation du portefeuille')
+    plt.axis('equal')
+    plt.show()
+
+def plot_price_history(portfolio):
+    crypto_data = portfolio.crypto_data
+    plt.figure(figsize=(12, 6))
+    for symbol in portfolio.crypto_list:
+        historical_data = crypto_data.get_historical_data(symbol)
+        dates = [entry['time'] for entry in historical_data]
+        prices = [entry['close'] for entry in historical_data]
+        plt.plot(dates, prices, label=symbol)
+    plt.title('Historique des prix')
+    plt.xlabel('Date')
+    plt.ylabel('Prix (USD)')
+    plt.legend()
+    plt.xticks(rotation=45)
+    plt.tight_layout()
+    plt.show()
