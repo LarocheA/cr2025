@@ -26,8 +26,8 @@ def main():
     for symbol, percentage in crypto_percentages.items():
         print(f"{symbol}: {percentage:.2f}%")
 
-    # Calculer et afficher le ROI (supposons une valeur initiale de 10000 pour cet exemple)
-    initial_value = 10000
+    # Calculer et afficher le ROI (supposons une valeur initiale de 4500 pour cet exemple)
+    initial_value = 4500
     roi = calculate_portfolio_roi(portfolio, initial_value)
     print(f"ROI du portefeuille: {roi:.2f}%")
 
