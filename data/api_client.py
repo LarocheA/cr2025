@@ -9,10 +9,17 @@ def get_crypto_price(symbol, vs_currency='USD'):
         "api_key": API_KEY_CRYPTOCOMPARE
     }
     response = requests.get(url, params=params)
+    
+    # Vérifiez si la requête a réussi
     if response.status_code == 200:
-        return response.json()['Data'][vs_currency]
+        data = response.json()
+        # Vérifiez si 'Data' et 'USD' existent dans la réponse
+        if 'Data' in data and vs_currency in data['Data']:
+            return data['Data'][vs_currency]
+        else:
+            raise KeyError(f"Les données pour {symbol} en {vs_currency} ne sont pas disponibles.")
     else:
-        raise Exception(f"Error fetching price for {symbol}: {response.status_code}")
+        raise Exception(f"Erreur lors de la récupération du prix pour {symbol}: {response.status_code}")
 
 def get_historical_data(symbol, vs_currency='USD', limit=2000):
     url = f"{BASE_URL_CRYPTOCOMPARE}/histoday"
