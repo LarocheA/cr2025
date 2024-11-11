@@ -1,36 +1,41 @@
-# analysis/optimization.py
-
+import cvxpy as cp
 import numpy as np
-import pandas as pd
-from scipy.optimize import minimize
 
-def optimize_portfolio(returns, target_return, risk_free_rate=0.02):
-    def objective(weights, returns):
-        portfolio_return = np.sum(returns.mean() * weights) * 252
-        portfolio_volatility = np.sqrt(np.dot(weights.T, np.dot(returns.cov() * 252, weights)))
-        sharpe_ratio = (portfolio_return - risk_free_rate) / portfolio_volatility
-        return -sharpe_ratio
+def optimize_portfolio(returns, risk_free_rate=0.02):
+    n = returns.shape[1]
+    mu = returns.mean().values
+    Sigma = returns.cov().values
 
-    def constraint(weights):
-        return np.sum(weights) - 1
+    w = cp.Variable(n)
+    ret = mu.T @ w
+    risk = cp.quad_form(w, Sigma)
+    sharpe_ratio = (ret - risk_free_rate) / cp.sqrt(risk)
 
-    num_assets = len(returns.columns)
-    args = (returns,)
-    constraints = ({'type': 'eq', 'fun': constraint})
-    bounds = tuple((0, 1) for asset in range(num_assets))
-    
-    result = minimize(objective, num_assets*[1./num_assets], args=args, 
-                      method='SLSQP', bounds=bounds, constraints=constraints)
-    
-    return result.x
+    prob = cp.Problem(cp.Maximize(sharpe_ratio),
+                      [cp.sum(w) == 1, w >= 0])
+    prob.solve()
+
+    return w.value
 
 def get_efficient_frontier(returns, num_portfolios=100):
-    results = []
-    for i in range(num_portfolios):
-        weights = np.random.random(len(returns.columns))
-        weights /= np.sum(weights)
-        portfolio_return = np.sum(returns.mean() * weights) * 252
-        portfolio_volatility = np.sqrt(np.dot(weights.T, np.dot(returns.cov() * 252, weights)))
-        results.append([portfolio_return, portfolio_volatility, weights])
-    
-    return pd.DataFrame(results, columns=['Return', 'Volatility', 'Weights'])
+    n = returns.shape[1]
+    mu = returns.mean().values
+    Sigma = returns.cov().values
+
+    efficient_portfolios = []
+    for target_return in np.linspace(mu.min(), mu.max(), num_portfolios):
+        w = cp.Variable(n)
+        risk = cp.quad_form(w, Sigma)
+        prob = cp.Problem(cp.Minimize(risk),
+                          [mu.T @ w >= target_return,
+                           cp.sum(w) == 1,
+                           w >= 0])
+        prob.solve()
+        if prob.status == 'optimal':
+            efficient_portfolios.append({
+                'weights': w.value,
+                'return': target_return,
+                'risk': np.sqrt(risk.value)
+            })
+
+    return efficient_portfolios
