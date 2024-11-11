@@ -3,13 +3,19 @@
 import pandas as pd
 from .api_client import get_crypto_price, get_historical_data
 
-def update_portfolio_prices(portfolio):
-    for crypto in portfolio:
-        crypto['price'] = get_crypto_price(crypto['symbol'])
-    return portfolio
+class CryptoData:
+    def __init__(self):
+        self.current_prices = {}
+        self.historical_data = {}
 
-def get_historical_dataframe(portfolio):
-    historical_data = {}
-    for crypto in portfolio:
-        historical_data[crypto['symbol']] = get_historical_data(crypto['symbol'])
-    return pd.DataFrame(historical_data)
+    def update_prices(self, symbols):
+        for symbol in symbols:
+            self.current_prices[symbol] = get_crypto_price(symbol)
+
+    def get_historical_data(self, symbols, days=2000):
+        for symbol in symbols:
+            self.historical_data[symbol] = get_historical_data(symbol, limit=days)
+
+    def to_dataframe(self):
+        df = pd.DataFrame(self.current_prices.items(), columns=['symbol', 'price'])
+        return df
