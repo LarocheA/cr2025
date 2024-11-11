@@ -3,7 +3,10 @@
 from config import PORTFOLIO
 from data.crypto_data import CryptoData
 from portfolio.portfolio import Portfolio
-from analysis.calculations import calculate_returns, calculate_volatility, calculate_sharpe_ratio
+from analysis.calculations import calculate_portfolio_roi, calculate_volatility, calculate_sharpe_ratio
+from analysis.optimization import optimize_portfolio, get_efficient_frontier
+from analysis.visualization import plot_asset_allocation, plot_efficient_frontier, plot_correlation_heatmap
+from data.api_client import get_fear_and_greed_index
 
 def main():
     # Initialisation des données
@@ -21,15 +24,25 @@ def main():
     print(portfolio.get_asset_allocation())
 
     # Analyse des performances
-    historical_data = crypto_data.get_historical_data(symbols)
-    for symbol, data in historical_data.items():
-        df = pd.DataFrame(data)
-        df = calculate_returns(df)
-        volatility = calculate_volatility(df)
-        sharpe_ratio = calculate_sharpe_ratio(df)
-        print(f"\nAnalyse pour {symbol}:")
-        print(f"Volatilité: {volatility:.2f}")
-        print(f"Ratio de Sharpe: {sharpe_ratio:.2f}")
+    returns = portfolio.calculate_returns()
+    volatility = portfolio.calculate_volatility()
+    sharpe_ratio = portfolio.calculate_sharpe_ratio()
+
+    print(f"\nVolatilité du portefeuille: {volatility:.2f}")
+    print(f"Ratio de Sharpe: {sharpe_ratio:.2f}")
+
+    # Optimisation du portefeuille
+    optimal_weights = optimize_portfolio(returns, target_return=0.1)
+    efficient_frontier = get_efficient_frontier(returns)
+
+    # Visualisations
+    plot_asset_allocation(portfolio)
+    plot_efficient_frontier(efficient_frontier, {'Return': portfolio.calculate_returns().mean() * 252, 'Volatility': volatility})
+    plot_correlation_heatmap(returns)
+
+    # Fear and Greed Index
+    fear_greed_index = get_fear_and_greed_index()
+    print(f"\nFear and Greed Index: {fear_greed_index}")
 
 if __name__ == "__main__":
     main()
