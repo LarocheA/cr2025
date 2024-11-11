@@ -33,3 +33,6 @@ class Portfolio:
 
     def to_dataframe(self):
         return self.df
+        
+    def get_returns(self):
+        return self.df['price'].pct_change().dropna()
