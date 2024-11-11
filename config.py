@@ -1,8 +1,9 @@
-# config.py
+API_KEY_CRYPTOCOMPARE = "02f11b8b9dec16c0149bae39ee0b3f4ea8cf7528552e71622d8b887ff3f149a0"
+API_KEY_COINMARKETCAP = "8a2d5b45-8271-492d-8ef7-56bdd2d76a1e"
+BASE_URL_CRYPTOCOMPARE = "https://min-api.cryptocompare.com/data/v2"
+BASE_URL_COINMARKETCAP = "https://pro-api.coinmarketcap.com/v2"
+FEAR_GREED_URL = "https://alternative.me/crypto/fear-and-greed-index/"
 
-API_KEY = "02f11b8b9dec16c0149bae39ee0b3f4ea8cf7528552e71622d8b887ff3f149a0"
-BASE_URL = "https://min-api.cryptocompare.com/data/v2"
-FEAR_GREED_URL = "https://api.alternative.me/fng/"
 PORTFOLIO = [
     {"symbol": "BTC", "quantity": 0.01177501},
     {"symbol": "ETH", "quantity": 0.22375339},
@@ -20,5 +21,3 @@ PORTFOLIO = [
     {"symbol": "USDC", "quantity": 0},
     {"symbol": "DAI", "quantity": 0}
 ]
-TARGET_RETURN = 0.3
-RISK_FREE_RATE = 0.02
