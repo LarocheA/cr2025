@@ -1,13 +1,17 @@
 # analysis/calculations.py
 
 import numpy as np
+import pandas as pd
 
-def calculate_roi(initial_value, current_value):
-    return ((current_value - initial_value) / initial_value) * 100
+def calculate_returns(df):
+    df['daily_return'] = df['close'].pct_change()
+    df['cumulative_return'] = (1 + df['daily_return']).cumprod() - 1
+    return df
 
-def calculate_portfolio_roi(portfolio, initial_value):
-    current_value = portfolio.get_total_value()
-    return calculate_roi(initial_value, current_value)
+def calculate_volatility(df):
+    return df['daily_return'].std() * np.sqrt(365)
 
-def calculate_volatility(returns):
-    return np.std(returns) * np.sqrt(365)
+def calculate_sharpe_ratio(df, risk_free_rate=0.01):
+    volatility = calculate_volatility(df)
+    annual_return = df['daily_return'].mean() * 365
+    return (annual_return - risk_free_rate) / volatility
