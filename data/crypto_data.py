@@ -19,3 +19,16 @@ class CryptoData:
     def to_dataframe(self):
         df = pd.DataFrame(self.current_prices.items(), columns=['symbol', 'price'])
         return df
+
+    def get_historical_prices(symbols, days=365):
+    historical_data = {}
+        for symbol in symbols:
+        data = get_historical_data(symbol, limit=days)
+        historical_data[symbol] = pd.DataFrame(data)
+        return historical_data
+
+    def calculate_returns(historical_data):
+    returns = {}
+        for symbol, data in historical_data.items():
+        returns[symbol] = data['close'].pct_change().dropna()
+        return pd.DataFrame(returns)
