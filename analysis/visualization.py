@@ -26,3 +26,13 @@ def plot_correlation_heatmap(returns):
     sns.heatmap(returns.corr(), annot=True, cmap='coolwarm', linewidths=0.5)
     plt.title('Correlation Heatmap')
     plt.show()
+
+def plot_optimized_weights(weights, symbols):
+    plt.figure(figsize=(10, 6))
+    plt.bar(symbols, weights)
+    plt.title('Poids optimisés du portefeuille')
+    plt.xlabel('Cryptomonnaies')
+    plt.ylabel('Poids')
+    plt.xticks(rotation=45)
+    plt.tight_layout()
+    plt.show()
