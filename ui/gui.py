@@ -35,4 +35,34 @@ class CryptoPortfolioGUI(QMainWindow):
         # Table pour afficher le portefeuille
         self.portfolio_table = QTableWidget()
         self.portfolio_table.setColumnCount(4)
-        self.portfolio_table.setHorizontalHeaderLabels(['Crypto', 'Quantité', 'Prix', '
+        self.portfolio_table.setHorizontalHeaderLabels(['Crypto', 'Quantité', 'Prix', 'Valeur Totale'])
+        layout.addWidget(self.portfolio_table)
+
+        self.update_portfolio_table()
+
+    def update_prices(self):
+        crypto_data = CryptoData()
+        crypto_data.update_prices()
+        self.portfolio.update_prices(crypto_data)
+        self.update_portfolio_table()
+
+    def update_portfolio_table(self):
+        df = self.portfolio.to_dataframe()
+        self.portfolio_table.setRowCount(len(df))
+        for i, (index, row) in enumerate(df.iterrows()):
+            self.portfolio_table.setItem(i, 0, QTableWidgetItem(row['symbol']))
+            self.portfolio_table.setItem(i, 1, QTableWidgetItem(str(row['quantity'])))
+            self.portfolio_table.setItem(i, 2, QTableWidgetItem(f"${row['price']:.2f}"))
+            self.portfolio_table.setItem(i, 3, QTableWidgetItem(f"${row['total_value']:.2f}"))
+
+    def show_portfolio_allocation(self):
+        plot_portfolio_allocation(self.portfolio)
+
+    def show_price_history(self):
+        plot_price_history(self.portfolio)
+
+def run_gui(portfolio):
+    app = QApplication(sys.argv)
+    ex = CryptoPortfolioGUI(portfolio)
+    ex.show()
+    sys.exit(app.exec_())
