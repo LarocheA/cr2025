@@ -20,3 +20,5 @@ PORTFOLIO = [
     {"symbol": "USDC", "quantity": 0},
     {"symbol": "DAI", "quantity": 0}
 ]
+TARGET_RETURN = 0.3
+RISK_FREE_RATE = 0.02
