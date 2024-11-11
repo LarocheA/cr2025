@@ -60,3 +60,12 @@ def plot_price_history(portfolio):
     plt.xticks(rotation=45)
     plt.tight_layout()
     plt.show()
+
+def plot_fear_greed_index(index):
+    plt.figure(figsize=(10, 6))
+    plt.bar(['Fear and Greed Index'], [index], color='orange')
+    plt.title('Crypto Fear and Greed Index')
+    plt.ylim(0, 100)
+    plt.axhline(y=50, color='r', linestyle='--')
+    plt.text(0, index, str(index), ha='center', va='bottom')
+    plt.show()
