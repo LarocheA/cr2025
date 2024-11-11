@@ -15,3 +15,17 @@ def get_crypto_price(symbol, vs_currency='USD'):
         return response.json()['Data'][vs_currency]
     else:
         raise Exception(f"Error fetching price for {symbol}: {response.status_code}")
+
+def get_historical_data(symbol, vs_currency='USD', limit=2000):
+    url = f"{BASE_URL}/histoday"
+    params = {
+        "fsym": symbol,
+        "tsym": vs_currency,
+        "limit": limit,
+        "api_key": API_KEY
+    }
+    response = requests.get(url, params=params)
+    if response.status_code == 200:
+        return response.json()['Data']['Data']
+    else:
+        raise Exception(f"Error fetching historical data for {symbol}: {response.status_code}")
