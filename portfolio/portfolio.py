@@ -1,16 +1,10 @@
-# portfolio/portfolio.py
-
 import pandas as pd
 import numpy as np
 
 class Portfolio:
-    def __init__(self, crypto_list):
-        self.crypto_list = crypto_list
-        self.df = pd.DataFrame(crypto_list)
-
-    def update_prices(self, crypto_data):
-        self.df = self.df.merge(crypto_data.to_dataframe(), on='symbol', how='left')
-        self.df['total_value'] = self.df['quantity'] * self.df['price']
+    def __init__(self, crypto_data):
+        self.crypto_data = crypto_data
+        self.df = self.crypto_data.to_dataframe()
 
     def get_total_value(self):
         return self.df['total_value'].sum()
@@ -20,19 +14,16 @@ class Portfolio:
         return self.df[['symbol', 'allocation']]
 
     def calculate_returns(self):
-        self.df['returns'] = self.df['price'].pct_change()
+        for symbol in self.df['symbol']:
+            hist_data = pd.DataFrame(self.crypto_data.historical_data[symbol])
+            self.df.loc[self.df['symbol'] == symbol, 'returns'] = hist_data['close'].pct_change().mean()
         return self.df['returns']
 
     def calculate_volatility(self):
-        return self.df['returns'].std() * np.sqrt(252)  # Assuming 252 trading days in a year
-
-    def calculate_sharpe_ratio(self, risk_free_rate=0.02):
-        returns = self.calculate_returns()
-        volatility = self.calculate_volatility()
-        return (returns.mean() - risk_free_rate) / volatility
+        for symbol in self.df['symbol']:
+            hist_data = pd.DataFrame(self.crypto_data.historical_data[symbol])
+            self.df.loc[self.df['symbol'] == symbol, 'volatility'] = hist_data['close'].pct_change().std() * np.sqrt(365)
+        return self.df['volatility']
 
     def to_dataframe(self):
         return self.df
-        
-    def get_returns(self):
-        return self.df['price'].pct_change().dropna()
