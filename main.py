@@ -32,7 +32,8 @@ def main():
     print(f"Ratio de Sharpe: {sharpe_ratio:.2f}")
 
     # Optimisation du portefeuille
-    optimal_weights = optimize_portfolio(returns, target_return=0.1)
+    optimized_weights = optimize_portfolio(portfolio.get_returns(), target_return=0.3)
+        print("Poids optimisés du portefeuille :", optimized_weights)
     efficient_frontier = get_efficient_frontier(returns)
 
     # Visualisations
