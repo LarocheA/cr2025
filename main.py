@@ -44,8 +44,6 @@ def main():
     correlation_matrix = calculate_correlation_matrix(portfolio)
 
     # Optimisation du portefeuille
-    optimal_weights = optimize_portfolio(portfolio)
-
     returns = portfolio.get_returns()
     optimal_weights = optimize_portfolio(returns)
     
