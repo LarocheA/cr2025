@@ -1,6 +1,6 @@
 API_KEY_CRYPTOCOMPARE = "02f11b8b9dec16c0149bae39ee0b3f4ea8cf7528552e71622d8b887ff3f149a0"
 API_KEY_COINMARKETCAP = "8a2d5b45-8271-492d-8ef7-56bdd2d76a1e"
-BASE_URL_CRYPTOCOMPARE = "https://min-api.cryptocompare.com/data/"
+BASE_URL_CRYPTOCOMPARE = "https://min-api.cryptocompare.com/data"
 BASE_URL_COINMARKETCAP = "https://pro-api.coinmarketcap.com/v2"
 FEAR_GREED_URL = "https://alternative.me/crypto/fear-and-greed-index/"
 
