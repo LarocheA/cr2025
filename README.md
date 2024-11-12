@@ -13,35 +13,45 @@ Ce projet sous Python est conçu pour suivre les cours des cryptomonnaies et gé
 ## Introduction
  
 
-## 1. Structure du projet
-crypto_portfolio/               Fichiers racine
+## 1. Structure du projetcrypto_portfolio/
+crypto_portfolio/
 │
-├── main.py                 --> Point d'entrée principal de l'application.
-├── config.py               --> Fichier de configuration pour stocker les constantes et les paramètres globaux.
+├── main.py
+├── config.py
+├── requirements.txt
+├── README.md
 │
-├── data/                       Module data
-│   ├── init.py
-│   ├── crypto_data.py      --> Gère la récupération et le stockage des données de cryptomonnaies.
-│   └── api_client.py       --> Contient les fonctions pour interagir avec les API externes (ex: CoinGecko, Binance).
+├── data/
+│   ├── __init__.py
+│   ├── crypto_data.py
+│   └── api_client.py
 │
-├── portfolio/                  Module portfolio
-│   ├── init.py
-│   ├── portfolio.py        --> Définit la classe Portefeuille et ses méthodes.
-│   └── transaction.py      --> Gère les transactions (achats, ventes) dans le portefeuille.
+├── portfolio/
+│   ├── __init__.py
+│   ├── portfolio.py
+│   └── transaction.py
 │
-├── ui/                         Module ui
-│   ├── init.py
-│   ├── cli.py              --> Implémente l'interface en ligne de commande.
-│   └── gui.py              --> Implémente l'interface graphique.
+├── ui/
+│   ├── __init__.py
+│   ├── cli.py
+│   └── gui.py
 │
-├── analysis/                   Module analysis
-│   ├── init.py
-│   ├── calculations.py     --> Contient les fonctions pour les calculs financiers (ex: ROI, performance).
-│   └── visualization.py    --> Gère la création de graphiques et de visualisations.
+├── analysis/
+│   ├── __init__.py
+│   ├── calculations.py
+│   ├── optimization.py
+│   └── visualization.py
 │
-└── utils/                      Module utils
-    ├── init.py
-    └── helpers.py          --> Fonctions utilitaires utilisées dans tout le projet.
+├── utils/
+│   ├── __init__.py
+│   └── helpers.py
+│
+└── tests/
+    ├── __init__.py
+    ├── test_data.py
+    ├── test_portfolio.py
+    ├── test_analysis.py
+    └── test_utils.py
 
 ## Installation
 Instructions pour installer le projet et ses dépendances.
