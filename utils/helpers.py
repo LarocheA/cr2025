@@ -75,3 +75,16 @@ def handle_api_error(response):
         print(f"Erreur {response.status_code}: Erreur serveur")
     else:
         print(f"Erreur inattendue: {response.status_code}")
+
+def export_to_csv(df, filename):
+    """
+    Exporte un DataFrame pandas vers un fichier CSV.
+    
+    :param df: Le DataFrame à exporter
+    :param filename: Le nom du fichier CSV de sortie
+    """
+    try:
+        df.to_csv(filename, index=False)
+        print(f"Données exportées avec succès dans '{filename}'")
+    except Exception as e:
+        print(f"Erreur lors de l'exportation des données : {str(e)}")
