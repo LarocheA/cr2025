@@ -38,6 +38,13 @@ class Portfolio:
             self.df = self.df.append(new_crypto, ignore_index=True)
         self.update_values()
 
+    def get_returns(self):
+        returns = pd.DataFrame()
+        for symbol in self.df['symbol']:
+            hist_data = pd.DataFrame(self.crypto_data.historical_data[symbol])
+            returns[symbol] = hist_data['close'].pct_change()
+        return returns
+
 def update_values(self):
     # Mettre à jour les prix et les valeurs totales
     pass
