@@ -3,30 +3,14 @@ from requests.exceptions import RequestException
 from bs4 import BeautifulSoup
 from config import API_KEY_CRYPTOCOMPARE, API_KEY_COINMARKETCAP, BASE_URL_CRYPTOCOMPARE, BASE_URL_COINMARKETCAP, FEAR_GREED_URL
 
-def get_crypto_price(symbol, vs_currency='USD'):
-    """
-    Récupère le prix actuel d'une cryptomonnaie.
-    
-    :param symbol: Le symbole de la cryptomonnaie
-    :param vs_currency: La devise de référence (par défaut USD)
-    :return: Le prix actuel de la cryptomonnaie
-    """
-    url = f"{BASE_URL_CRYPTOCOMPARE}/price"
-    params = {
-        "fsym": symbol,
-        "tsyms": vs_currency,
-        "api_key": API_KEY_CRYPTOCOMPARE
-    }
-    try:
-        response = requests.get(url, params=params)
-        response.raise_for_status()
+def get_crypto_price(symbol, vs_currency='usd'):
+    url = f"https://api.coingecko.com/api/v3/simple/price?ids={symbol}&vs_currencies={vs_currency}"
+    response = requests.get(url)
+    if response.status_code == 200:
         data = response.json()
-        if vs_currency in data:
-            return data[vs_currency]
-        else:
-            raise KeyError(f"Les données pour {symbol} en {vs_currency} ne sont pas disponibles.")
-    except RequestException as e:
-        raise Exception(f"Erreur lors de la récupération du prix pour {symbol}: {str(e)}")
+        if symbol in data and vs_currency in data[symbol]:
+            return data[symbol][vs_currency]
+    raise Exception(f"Erreur lors de la récupération du prix pour {symbol}")
 
 # 
 def get_historical_data(symbol, vs_currency='USD', limit=2000):
