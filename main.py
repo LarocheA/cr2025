@@ -1,5 +1,22 @@
 # main.py
 
+# Suivez les instructions à l'écran pour interagir avec l'application.
+
+# Structure du projet
+#- `main.py`: Point d'entrée principal de l'application
+#- `config.py`: Configuration de l'application
+#- `data/`: Module pour la récupération et le stockage des données
+#- `portfolio/`: Module de gestion du portefeuille
+#- `analysis/`: Module d'analyse et d'optimisation
+#- `ui/`: Interfaces utilisateur (CLI et GUI)
+#- `utils/`: Fonctions utilitaires
+
+# Contribution
+# Les contributions sont les bienvenues ! Veuillez consulter le fichier CONTRIBUTING.md pour plus de détails.
+
+# Licence
+# Ce projet est sous licence MIT. Voir le fichier LICENSE pour plus de détails.
+
 import pandas as pd
 from config import PORTFOLIO
 from data.crypto_data import CryptoData
