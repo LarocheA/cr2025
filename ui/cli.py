@@ -1,35 +1,43 @@
+import argparse
 from portfolio.portfolio import Portfolio
 from data.crypto_data import CryptoData
 from config import PORTFOLIO
-
-def display_menu():
-    print("\n--- Menu Principal ---")
-    print("1. Afficher le portefeuille")
-    print("2. Mettre à jour les prix")
-    print("3. Analyser les performances")
-    print("4. Quitter")
+from analysis.visualization import plot_portfolio_allocation, plot_price_history
+from utils.helpers import export_to_csv
 
 def run_cli():
+    parser = argparse.ArgumentParser(description="Crypto Portfolio Tracker CLI")
+    parser.add_argument("-d", "--display", action="store_true", help="Display portfolio")
+    parser.add_argument("-u", "--update", action="store_true", help="Update prices")
+    parser.add_argument("-a", "--analyze", action="store_true", help="Analyze performance")
+    parser.add_argument("-g", "--graph", choices=["allocation", "history"], help="Display graphs")
+    parser.add_argument("-e", "--export", action="store_true", help="Export data to CSV")
+    
+    args = parser.parse_args()
+    
     crypto_data = CryptoData()
     portfolio = Portfolio(PORTFOLIO)
-
-    while True:
-        display_menu()
-        choice = input("Choisissez une option : ")
-
-        if choice == '1':
-            portfolio.display()
-        elif choice == '2':
-            crypto_data.update_prices()
-            portfolio.update_prices(crypto_data)
-            print("Prix mis à jour avec succès.")
-        elif choice == '3':
-            portfolio.analyze_performance()
-        elif choice == '4':
-            print("Au revoir!")
-            break
-        else:
-            print("Option invalide. Veuillez réessayer.")
+    
+    if args.update:
+        crypto_data.update_prices()
+        portfolio.update_prices(crypto_data)
+        print("Prix mis à jour avec succès.")
+    
+    if args.display:
+        portfolio.display()
+    
+    if args.analyze:
+        portfolio.analyze_performance()
+    
+    if args.graph:
+        if args.graph == "allocation":
+            plot_portfolio_allocation(portfolio)
+        elif args.graph == "history":
+            plot_price_history(portfolio)
+    
+    if args.export:
+        export_to_csv(portfolio.to_dataframe(), "portfolio_export.csv")
+        print("Données exportées avec succès dans 'portfolio_export.csv'")
 
 if __name__ == "__main__":
     run_cli()
