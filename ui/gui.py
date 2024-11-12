@@ -1,6 +1,7 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QPushButton, QLabel, QTableWidget, QTableWidgetItem
-from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QPushButton, QLabel, QTableWidget, QTableWidgetItem, QHeaderView
+from PyQt5.QtCore import Qt, QTimer
+from PyQt5.QtChart import QChart, QChartView, QPieSeries
 from portfolio.portfolio import Portfolio
 from data.crypto_data import CryptoData
 from analysis.visualization import plot_portfolio_allocation, plot_price_history
@@ -36,15 +37,28 @@ class CryptoPortfolioGUI(QMainWindow):
         self.portfolio_table = QTableWidget()
         self.portfolio_table.setColumnCount(4)
         self.portfolio_table.setHorizontalHeaderLabels(['Crypto', 'Quantité', 'Prix', 'Valeur Totale'])
+        self.portfolio_table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        self.portfolio_table.setSortingEnabled(True)
         layout.addWidget(self.portfolio_table)
 
+        # Graphique en camembert pour l'allocation
+        self.chart_view = QChartView()
+        layout.addWidget(self.chart_view)
+
         self.update_portfolio_table()
+        self.update_allocation_chart()
+
+        # Timer pour mettre à jour automatiquement les données
+        self.timer = QTimer(self)
+        self.timer.timeout.connect(self.update_prices)
+        self.timer.start(60000)  # Mise à jour toutes les minutes
 
     def update_prices(self):
         crypto_data = CryptoData()
         crypto_data.update_prices()
         self.portfolio.update_prices(crypto_data)
         self.update_portfolio_table()
+        self.update_allocation_chart()
 
     def update_portfolio_table(self):
         df = self.portfolio.to_dataframe()
@@ -54,6 +68,16 @@ class CryptoPortfolioGUI(QMainWindow):
             self.portfolio_table.setItem(i, 1, QTableWidgetItem(str(row['quantity'])))
             self.portfolio_table.setItem(i, 2, QTableWidgetItem(f"${row['price']:.2f}"))
             self.portfolio_table.setItem(i, 3, QTableWidgetItem(f"${row['total_value']:.2f}"))
+
+    def update_allocation_chart(self):
+        series = QPieSeries()
+        for index, row in self.portfolio.to_dataframe().iterrows():
+            series.append(row['symbol'], row['total_value'])
+
+        chart = QChart()
+        chart.addSeries(series)
+        chart.setTitle("Allocation du portefeuille")
+        self.chart_view.setChart(chart)
 
     def show_portfolio_allocation(self):
         plot_portfolio_allocation(self.portfolio)
