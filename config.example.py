@@ -7,7 +7,7 @@ BASE_URL_COINMARKETCAP = "https://pro-api.coinmarketcap.com/v2"
 FEAR_GREED_URL = "https://alternative.me/crypto/fear-and-greed-index/"
 
 PORTFOLIO = [
-    {"symbol": "BTC", "quantity": 0.01177501},
-    {"symbol": "ETH", "quantity": 0.22375339},
+    {"symbol": "BTC", "quantity": 0.12345678},
+    {"symbol": "ETH", "quantity": 1.23456789},
     # Ajoutez ici le reste de votre portefeuille
 ]
