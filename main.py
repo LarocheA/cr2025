@@ -46,6 +46,9 @@ def main():
     # Optimisation du portefeuille
     optimal_weights = optimize_portfolio(portfolio)
 
+    returns = portfolio.get_returns()
+    optimal_weights = optimize_portfolio(returns)
+    
     # Affichage des résultats
     print(f"Valeur totale du portefeuille: ${portfolio.get_total_value():.2f}")
     print(f"Rendement du portefeuille: {portfolio_return:.2f}%")
