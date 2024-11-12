@@ -26,8 +26,8 @@ class Portfolio:
         return self.df['volatility']
 
     def calculate_sharpe_ratio(self, risk_free_rate=0.02):
-    returns = self.calculate_returns()
-    volatility = self.calculate_volatility()
+        returns = self.calculate_returns()
+        volatility = self.calculate_volatility()
         return (returns.mean() - risk_free_rate) / volatility.mean()
 
     def add_crypto(self, symbol, quantity):
