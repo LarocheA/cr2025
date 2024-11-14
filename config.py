@@ -14,6 +14,7 @@ PORTFOLIO = [
     {"symbol": "LINK", "quantity": 40.9},
     {"symbol": "GRT", "quantity": 1366.1},
     {"symbol": "CAPS", "quantity": 19217.1121},
+    {"symbol": "SAND", "quantity": 207.67937},
     {"symbol": "SOL", "quantity": 0.07633722},
     {"symbol": "TIA", "quantity": 1.7},
     {"symbol": "OMI", "quantity": 94000},
